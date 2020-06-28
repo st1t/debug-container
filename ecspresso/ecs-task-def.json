@@ -1,0 +1,64 @@
+{
+  "containerDefinitions": [
+    {
+      "command": [
+        "/usr/bin/bash",
+        "-x",
+        "/tmp/ssm-agent-start.sh"
+      ],
+      "linuxParameters": {
+        "capabilities": {
+          "add": [
+            "SYS_PTRACE"
+          ]
+        }
+      },
+      "cpu": 384,
+      "dockerLabels": {},
+      "secrets": [
+        {
+          "name": "SSM_PARAMETER_HOGE",
+          "valueFrom": "{{ tfstate `aws_ssm_parameter.hoge.arn` }}"
+        }
+      ],
+      "environment": [
+        {
+          "name": "SSM_ACTIVATE",
+          "value": "true"
+        },
+        {
+          "name": "ECS_ENABLE_CONTAINER_METADATA",
+          "value": "true"
+        }
+      ],
+      "essential": true,
+      "image": "st1t/debug-container:latest",
+      "links": [],
+      "logConfiguration": {
+        "logDriver": "awslogs",
+        "options": {
+          "awslogs-group": "{{ tfstate `aws_cloudwatch_log_group.debug_container.name` }}",
+          "awslogs-stream-prefix": "debug",
+          "awslogs-region": "ap-northeast-1"
+        }
+      },
+      "memory": 768,
+      "mountPoints": [],
+      "name": "debug-container",
+      "portMappings": [],
+      "privileged": false,
+      "volumesFrom": []
+    }
+  ],
+  "cpu": "512",
+  "executionRoleArn": "{{ tfstate `aws_iam_role.fargate-execution.arn` }}",
+  "family": "debug-container",
+  "memory": "1024",
+  "networkMode": "awsvpc",
+  "placementConstraints": [],
+  "requiresCompatibilities": [
+    "FARGATE"
+  ],
+  "taskRoleArn": "{{ tfstate `aws_iam_role.task-execution.arn` }}",
+  "volumes": []
+}
