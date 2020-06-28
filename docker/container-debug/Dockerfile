@@ -12,6 +12,7 @@ RUN apt update && apt install -y \
         gettext-base \
         init \
         jq \
+        less \
         mysql-client \
         netcat \
         postgresql-client \
