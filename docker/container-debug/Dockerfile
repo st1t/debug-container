@@ -20,6 +20,7 @@ RUN apt update && apt install -y \
         redis-tools \
         strace \
         sudo \
+        telnet \
         tzdata \
         unzip \
         vim \
